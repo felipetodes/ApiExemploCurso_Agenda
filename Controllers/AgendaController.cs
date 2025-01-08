@@ -30,6 +30,26 @@ namespace ApiExemploCurso.Controllers
                 var command = new SqlCommand(sql, con);
                 var reader = command.ExecuteReader();
                 var lista = new List<Contato>();
+
+                while (reader.Read())
+                {
+                    lista.Add(
+                        new Contato()
+                        {
+                            Id = reader.GetInt32(0),
+                            Nome = reader.GetString(1),
+                            Email = reader.GetString(2),
+                            DtInc = reader.GetDateTime(3)
+
+                        }
+                        );
+            
+                }
+                con.Close();
+
+                if (lista.Count > 0)
+                    return Ok(lista);
+                return NotFound("Nenhum contato localizado!");
             }
         }
 

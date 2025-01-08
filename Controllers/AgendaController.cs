@@ -1,6 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Net;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiExemploCurso.Controllers

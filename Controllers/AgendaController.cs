@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Net;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,8 @@ namespace ApiExemploCurso.Controllers
 
         [HttpGet]
         [Route("ExecutarSelect")]
+        [ProducesResponseType(typeof(List<Contato>), 200)]
+        [ProducesResponseType(404)]
         public ActionResult ExecutarSelect() {
 
 

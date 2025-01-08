@@ -46,7 +46,7 @@ namespace ApiExemploCurso.Controllers
                         );
             
                 }
-                lista.Clear();
+                
                 con.Close();
 
                 if (lista.Count > 0)

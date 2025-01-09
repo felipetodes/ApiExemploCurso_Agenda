@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore;
-using Swagger;
 namespace ApiExemploCurso
 {
     public class Program
@@ -27,7 +26,7 @@ namespace ApiExemploCurso
 
             app.UseAuthorization();
 
-            // Call UseSwagger before UseSwaggerUI
+            // **Importante:** A ordem é crucial!
             app.UseSwagger();
             app.UseSwaggerUI();
 

@@ -23,7 +23,8 @@ namespace ApiExemploCurso.Controllers
         [Route("ExecutarSelect")]
         [ProducesResponseType(typeof(List<Contato>), 200)]
         [ProducesResponseType(404)]
-        public ActionResult ExecutarSelect() {
+        public ActionResult ExecutarSelect()
+        {
 
 
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -35,7 +36,7 @@ namespace ApiExemploCurso.Controllers
                 var command = new SqlCommand(sql, con);
                 var reader = command.ExecuteReader();
                 var lista = new List<Contato>();
-                
+
                 while (reader.Read())
                 {
                     lista.Add(
@@ -48,9 +49,9 @@ namespace ApiExemploCurso.Controllers
 
                         }
                         );
-            
+
                 }
-                
+
                 con.Close();
 
                 if (lista.Count > 0)
@@ -70,8 +71,8 @@ namespace ApiExemploCurso.Controllers
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())"; 
-                    
+                string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())";
+
 
                 con.Open();
 
@@ -83,9 +84,9 @@ namespace ApiExemploCurso.Controllers
                 var qtdLinhasAfetadas = command.ExecuteNonQuery();
 
                 con.Close();
-                
 
-                if(qtdLinhasAfetadas > 0)
+
+                if (qtdLinhasAfetadas > 0)
                     return Ok("Contato inserido com sucesso!");
                 return BadRequest("Ocorreu um erro ao incluir o novo contato");
             }
@@ -95,6 +96,7 @@ namespace ApiExemploCurso.Controllers
         [Route("ExecutarUpdate")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public ActionResult ExecutarUpdate([FromBody] Contato contato)
         {
 
@@ -122,6 +124,45 @@ namespace ApiExemploCurso.Controllers
             }
 
         }
+        [HttpDelete]
+        [Route("ExecutarDelete")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public ActionResult ExecutarDelete(int id)
+        {
 
+            try
+            {
+
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string sql = "DELETE FROM CONTATO WHERE ID = @id";
+
+
+                    con.Open();
+
+                    var command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@id", id);
+
+
+                    var qtdLinhasAfetadas = command.ExecuteNonQuery();
+
+                    con.Close();
+
+
+                    if (qtdLinhasAfetadas > 0)
+                        return Ok("Contato excluído com sucesso!");
+                        return NotFound("Nenhum contato localizado para exclusão!");
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Ocorreu um erro ao excluir o contato");
+
+
+            }
+        }
     }
 }

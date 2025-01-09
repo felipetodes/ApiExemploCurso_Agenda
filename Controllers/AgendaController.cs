@@ -152,7 +152,7 @@ namespace ApiExemploCurso.Controllers
 
                     if (qtdLinhasAfetadas > 0)
                         return Ok("Contato excluído com sucesso!");
-                        return NotFound("Nenhum contato localizado para exclusão!");
+                    return NotFound("Nenhum contato localizado para exclusão!");
 
 
                 }
@@ -160,6 +160,45 @@ namespace ApiExemploCurso.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Ocorreu um erro ao excluir o contato");
+
+
+            }
+        }
+
+        [HttpGet]
+        [Route("ExecutarSelectEspecifico")]
+        [ProducesResponseType(typeof(Contato), 200)]
+        [ProducesResponseType(404)]
+        public ActionResult ExecutarSelectEspecifico(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT ID, NOME, EMAIL, DT_INC FROM CONTATO WHERE ID = @id";
+
+                con.Open();
+
+                var command = new SqlCommand(sql, con);
+                var reader = command.ExecuteReader();
+                Contato contato = null;
+
+                if (reader.Read())
+                {
+                    contato = new Contato()
+                    {
+                        Id = reader.GetInt32(0),
+                        Nome = reader.GetString(1),
+                        Email = reader.GetString(2),
+                        DtInc = reader.GetDateTime(3),
+                       
+                    };
+                }
+
+                con.Close();
+
+                if (contato == null)
+                    return Ok(con);
+                return NotFound("Nenhum contato localizado!");
+
 
 
             }

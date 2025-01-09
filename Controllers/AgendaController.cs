@@ -178,6 +178,7 @@ namespace ApiExemploCurso.Controllers
                 con.Open();
 
                 var command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@id", id); 
                 var reader = command.ExecuteReader();
                 Contato contato = null;
 

@@ -101,13 +101,13 @@ namespace ApiExemploCurso.Controllers
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())";
+                string sql = "UPDATE CONTATO SET NOME = @Nome, EMAIL = @Email WHERE ID = @Id";
 
 
                 con.Open();
 
                 var command = new SqlCommand(sql, con);
-
+                command.Parameters.AddWithValue("@Id", contato.Id);
                 command.Parameters.AddWithValue("@Nome", contato.Nome);
                 command.Parameters.AddWithValue("@Email", contato.Email);
 
@@ -117,8 +117,8 @@ namespace ApiExemploCurso.Controllers
 
 
                 if (qtdLinhasAfetadas > 0)
-                    return Ok("Contato inserido com sucesso!");
-                return BadRequest("Ocorreu um erro ao incluir o novo contato");
+                    return Ok("Contato atualizado com sucesso!");
+                return BadRequest("Ocorreu um erro ao atualizar o novo contato");
             }
 
         }

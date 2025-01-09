@@ -197,7 +197,7 @@ namespace ApiExemploCurso.Controllers
                 con.Close();
 
                 if (contato == null)
-                    return Ok(con);
+                    return Ok(contato);
                 return NotFound("Nenhum contato localizado!");
 
 

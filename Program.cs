@@ -1,3 +1,6 @@
+using ApiExemploCurso.EDs;
+using ApiExemploCurso.MAPs;
+using Dapper.FluentMap;
 using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore;
 namespace ApiExemploCurso
@@ -10,6 +13,13 @@ namespace ApiExemploCurso
 
             // Add services to the container.
 
+            FluentMapper.Initialize(config =>
+            {
+                config.AddMap(new ContatoMap());
+            }
+                );
+
+            
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();

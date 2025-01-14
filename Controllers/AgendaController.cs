@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using ApiExemploCurso.EDs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiExemploCurso.Controllers
@@ -21,7 +22,7 @@ namespace ApiExemploCurso.Controllers
 
         [HttpGet]
         [Route("ExecutarSelect")]
-        [ProducesResponseType(typeof(List<Contato>), 200)]
+        [ProducesResponseType(typeof(List<ContatoED>), 200)]
         [ProducesResponseType(404)]
         public ActionResult ExecutarSelect()
         {
@@ -35,12 +36,12 @@ namespace ApiExemploCurso.Controllers
 
                 var command = new SqlCommand(sql, con);
                 var reader = command.ExecuteReader();
-                var lista = new List<Contato>();
+                var lista = new List<ContatoED>();
 
                 while (reader.Read())
                 {
                     lista.Add(
-                        new Contato()
+                        new ContatoED()
                         {
                             Id = reader.GetInt32(0),
                             Nome = reader.GetString(1),
@@ -65,7 +66,7 @@ namespace ApiExemploCurso.Controllers
         [Route("ExecutarInsert")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public ActionResult ExecutarInsert([FromBody] Contato contato)
+        public ActionResult ExecutarInsert([FromBody] ContatoED contato)
         {
 
 
@@ -97,7 +98,7 @@ namespace ApiExemploCurso.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public ActionResult ExecutarUpdate([FromBody] Contato contato)
+        public ActionResult ExecutarUpdate([FromBody] ContatoED contato)
         {
 
 
@@ -167,7 +168,7 @@ namespace ApiExemploCurso.Controllers
 
         [HttpGet]
         [Route("ExecutarSelectEspecifico")]
-        [ProducesResponseType(typeof(Contato), 200)]
+        [ProducesResponseType(typeof(ContatoED), 200)]
         [ProducesResponseType(404)]
         public ActionResult ExecutarSelectEspecifico(int id)
         {
@@ -180,11 +181,11 @@ namespace ApiExemploCurso.Controllers
                 var command = new SqlCommand(sql, con);
                 command.Parameters.AddWithValue("@id", id); 
                 var reader = command.ExecuteReader();
-                Contato contato = null;
+                ContatoED contato = null;
 
                 if (reader.Read())
                 {
-                    contato = new Contato()
+                    contato = new ContatoED()
                     {
                         Id = reader.GetInt32(0),
                         Nome = reader.GetString(1),

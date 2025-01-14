@@ -1,6 +1,6 @@
-﻿namespace ApiExemploCurso
+﻿namespace ApiExemploCurso.EDs
 {
-    public class Contato
+    public class ContatoED
     {
         public int Id { get; set; }
 

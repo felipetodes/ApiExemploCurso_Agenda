@@ -30,7 +30,7 @@ namespace ApiExemploCurso.RNs
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static ContatoED? ConsultaPorId(int id)
+        public static ContatoED? ConsultarPorId(int id)
         {
             using (var con = new SqlConnection(Conexao.AGENDA))
             {

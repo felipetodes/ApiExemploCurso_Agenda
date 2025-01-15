@@ -1,6 +1,6 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using ApiExemploCurso.EDs;
+using ApiExemploCurso.RNs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiExemploCurso.Controllers
@@ -23,45 +23,24 @@ namespace ApiExemploCurso.Controllers
         [HttpGet]
         [Route("ExecutarSelect")]
         [ProducesResponseType(typeof(List<ContatoED>), 200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public ActionResult ExecutarSelect()
         {
-
-
-            using (SqlConnection con = new SqlConnection(_connectionString))
+            try
             {
-                string sql = "SELECT ID, NOME, EMAIL, DT_INC FROM CONTATO";
-
-                con.Open();
-
-                var command = new SqlCommand(sql, con);
-                var reader = command.ExecuteReader();
-                var lista = new List<ContatoED>();
-
-                while (reader.Read())
-                {
-                    lista.Add(
-                        new ContatoED()
-                        {
-                            Id = reader.GetInt32(0),
-                            Nome = reader.GetString(1),
-                            Email = reader.GetString(2),
-                            DtInc = reader.GetDateTime(3)
-
-                        }
-                        );
-
-                }
-
-                con.Close();
-
+                var lista = ContatoRN.ListarTodos();
                 if (lista.Count > 0)
                     return Ok(lista);
                 return NotFound("Nenhum contato localizado!");
             }
+            catch (Exception)
+            {
 
-        }
-
+                return BadRequest("Ocorreu um erro ao comunicar com o banco de dados!");
+            }
+               
+            }
         [HttpPost]
         [Route("ExecutarInsert")]
         [ProducesResponseType(200)]
@@ -69,31 +48,22 @@ namespace ApiExemploCurso.Controllers
         public ActionResult ExecutarInsert([FromBody] ContatoED contato)
         {
 
-
-            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())";
+                try
+                {
+                    var qtdLinhas = ContatoRN.Inserir(contato);
+                    if (qtdLinhas > 0)
+                        return Ok("Contato incluído com sucesso!");
+                    return BadRequest("Ocorreu um erro ao incluir um novo contato!");
+                }
+                catch (Exception)
+                {
 
+                    return BadRequest("Ocorreu um erro ao comunicar com o banco de dados!");
+                }
 
-                con.Open();
-
-                var command = new SqlCommand(sql, con);
-
-                command.Parameters.AddWithValue("@Nome", contato.Nome);
-                command.Parameters.AddWithValue("@Email", contato.Email);
-
-                var qtdLinhasAfetadas = command.ExecuteNonQuery();
-
-                con.Close();
-
-
-                if (qtdLinhasAfetadas > 0)
-                    return Ok("Contato inserido com sucesso!");
-                return BadRequest("Ocorreu um erro ao incluir o novo contato");
             }
-
-        }
-        [HttpPut]
+            [HttpPut]
         [Route("ExecutarUpdate")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -172,38 +142,21 @@ namespace ApiExemploCurso.Controllers
         [ProducesResponseType(404)]
         public ActionResult ExecutarSelectEspecifico(int id)
         {
-            using (SqlConnection con = new SqlConnection(_connectionString))
+            try
             {
-                string sql = "SELECT ID, NOME, EMAIL, DT_INC FROM CONTATO WHERE ID = @id";
-
-                con.Open();
-
-                var command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@id", id); 
-                var reader = command.ExecuteReader();
-                ContatoED contato = null;
-
-                if (reader.Read())
-                {
-                    contato = new ContatoED()
-                    {
-                        Id = reader.GetInt32(0),
-                        Nome = reader.GetString(1),
-                        Email = reader.GetString(2),
-                        DtInc = reader.GetDateTime(3),
-                       
-                    };
-                }
-
-                con.Close();
-
-                if (contato == null)
+                var contato = ContatoRN.ConsultarPorId(id);
+                if (contato != null)
                     return Ok(contato);
-                return NotFound("Nenhum contato localizado!");
-
-
-
+                return NotFound("Nenhum contato localizado com o ID fornecido!");
             }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao comunicar com o banco de dados!");
+            }
+
         }
+
     }
-}
+        }
+  

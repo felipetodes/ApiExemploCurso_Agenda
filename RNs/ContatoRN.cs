@@ -24,6 +24,12 @@ namespace ApiExemploCurso.RNs
                 }
 
             }
+
+        /// <summary>
+        /// Exclusão de Contatos
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static ContatoED? ConsultaPorId(int id)
         {
             using (var con = new SqlConnection(Conexao.AGENDA))
@@ -37,6 +43,12 @@ namespace ApiExemploCurso.RNs
             }
 
         }
+
+        /// <summary>
+        /// Inclusão de Novos Contatos
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static int Inserir(ContatoED contato)
         {
             using (var con = new SqlConnection(Conexao.AGENDA))
@@ -50,6 +62,12 @@ namespace ApiExemploCurso.RNs
             }
 
         }
+
+        /// <summary>
+        /// Alteração de Contatos Existentes
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static int Alterar(ContatoED contato)
         {
             using (var con = new SqlConnection(Conexao.AGENDA))
@@ -63,6 +81,8 @@ namespace ApiExemploCurso.RNs
             }
 
         }
+
+
         public static int Excluir(int id)
         {
             using (var con = new SqlConnection(Conexao.AGENDA))

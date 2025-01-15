@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using ApiExemploCurso.EDs;
 using Dapper;
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace ApiExemploCurso.RNs
 {
@@ -45,6 +45,32 @@ namespace ApiExemploCurso.RNs
                 string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())";
 
                 return con.Execute(sql, contato);
+
+
+            }
+
+        }
+        public static int Alterar(ContatoED contato)
+        {
+            using (var con = new SqlConnection(Conexao.AGENDA))
+            {
+                con.Open();
+                string sql = "UPDATE CONTATO SET NOME = @Nome, EMAIL = @Email WHERE ID = @Id";
+
+                return con.Execute(sql, contato);
+
+
+            }
+
+        }
+        public static int Excluir(int id)
+        {
+            using (var con = new SqlConnection(Conexao.AGENDA))
+            {
+                con.Open();
+                string sql = "DELETE FROM CONTATO WHERE ID = @id";
+
+                return con.Execute(sql, id);
 
 
             }

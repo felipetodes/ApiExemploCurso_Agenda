@@ -16,7 +16,7 @@ namespace ApiExemploCurso.RNs
                 using (var con = new SqlConnection(Conexao.AGENDA))
                 {
                 con.Open();
-                string sql = "SELECT ID, NOME, EMAIL, DT_INC FROM CONTATO";
+                string sql = "SELECT* FROM CONTATO";
 
                    return con.Query<ContatoED>(sql).ToList();
                 
@@ -24,6 +24,32 @@ namespace ApiExemploCurso.RNs
                 }
 
             }
+        public static ContatoED? ConsultaPorId(int id)
+        {
+            using (var con = new SqlConnection(Conexao.AGENDA))
+            {
+                con.Open();
+                string sql = "SELECT* FROM CONTATO WHERE ID = @id";
+
+                return con.Query<ContatoED>(sql, new { id }).FirstOrDefault();
+
+
+            }
+
         }
+        public static int Inserir(ContatoED contato)
+        {
+            using (var con = new SqlConnection(Conexao.AGENDA))
+            {
+                con.Open();
+                string sql = "INSERT INTO CONTATO (NOME, EMAIL, DT_INC) VALUES(@Nome, @Email, GETDATE())";
+
+                return con.Execute(sql, contato);
+
+
+            }
+
+        }
+    }
     }
 

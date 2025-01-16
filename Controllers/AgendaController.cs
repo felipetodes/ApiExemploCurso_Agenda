@@ -48,7 +48,7 @@ namespace ApiExemploCurso.Controllers
         public ActionResult ExecutarInsert([FromBody] ContatoED contato)
         {
 
-            {
+            
                 try
                 {
                     var qtdLinhas = ContatoRN.Inserir(contato);
@@ -72,26 +72,17 @@ namespace ApiExemploCurso.Controllers
         {
 
 
-            using (SqlConnection con = new SqlConnection(_connectionString))
+            try
             {
-                string sql = "UPDATE CONTATO SET NOME = @Nome, EMAIL = @Email WHERE ID = @Id";
+                var qtdLinhas = ContatoRN.Alterar(contato);
+                if (qtdLinhas > 0)
+                    return Ok("Contato alterado com sucesso!");
+                return BadRequest("Ocorreu um erro ao alterar um novo contato!");
+            }
+            catch (Exception)
+            {
 
-
-                con.Open();
-
-                var command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@Id", contato.Id);
-                command.Parameters.AddWithValue("@Nome", contato.Nome);
-                command.Parameters.AddWithValue("@Email", contato.Email);
-
-                var qtdLinhasAfetadas = command.ExecuteNonQuery();
-
-                con.Close();
-
-
-                if (qtdLinhasAfetadas > 0)
-                    return Ok("Contato atualizado com sucesso!");
-                return BadRequest("Ocorreu um erro ao atualizar o novo contato");
+                return BadRequest("Ocorreu um erro ao comunicar com o banco de dados!");
             }
 
         }
@@ -104,36 +95,17 @@ namespace ApiExemploCurso.Controllers
 
             try
             {
-
-                using (SqlConnection con = new SqlConnection(_connectionString))
-                {
-                    string sql = "DELETE FROM CONTATO WHERE ID = @id";
-
-
-                    con.Open();
-
-                    var command = new SqlCommand(sql, con);
-                    command.Parameters.AddWithValue("@id", id);
-
-
-                    var qtdLinhasAfetadas = command.ExecuteNonQuery();
-
-                    con.Close();
-
-
-                    if (qtdLinhasAfetadas > 0)
-                        return Ok("Contato excluído com sucesso!");
-                    return NotFound("Nenhum contato localizado para exclusão!");
-
-
-                }
+                var qtdLinhas = ContatoRN.Excluir(id);
+                if (qtdLinhas > 0)
+                    return Ok("Contato excluído com sucesso!");
+                return BadRequest("Ocorreu um erro ao excluir um novo contato!");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest("Ocorreu um erro ao excluir o contato");
 
-
+                return BadRequest("Ocorreu um erro ao comunicar com o banco de dados!");
             }
+
         }
 
         [HttpGet]

@@ -10,15 +10,7 @@ namespace ApiExemploCurso.Controllers
 
     public class AgendaController : Controller
     {
-        private readonly string _connectionString;
-        private object console;
 
-        public AgendaController(IConfiguration config)
-        {
-            _connectionString = config.GetConnectionString("MinhaConexao");
-        }
-
-        public object JSON { get; private set; }
 
         [HttpGet]
         [Route("ExecutarSelect")]
